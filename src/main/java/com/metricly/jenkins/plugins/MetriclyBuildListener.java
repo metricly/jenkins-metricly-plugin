@@ -1,10 +1,13 @@
 package com.metricly.jenkins.plugins;
 
+import com.metricly.jenkins.plugins.client.IngestPayload;
 import com.metricly.jenkins.plugins.client.MetriclyClient;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
+import hudson.model.Queue;
+import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.model.listeners.RunListener;
@@ -21,16 +24,44 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
     static final String DISPLAY_NAME = "Metricly Plugin";
     static final String DEFAULT_API_LOCATION = "https://api.app.metricly.com";
 
+    private static final Queue queue = Queue.getInstance();
+
     private static final Logger logger =  Logger.getLogger(MetriclyBuildListener.class.getName());
 
     public final void onStarted(final Run run, final TaskListener listener) {
         String jobName = run.getParent().getFullName();
         logger.info(String.format("onStarted() called with jobName: %s", jobName));
+
+        Queue.Item item = queue.getItem(run.getQueueId());
+
+        IngestPayload ingestPayload = new IngestPayload(getDescriptor().getHostname());
+
+        try {
+            ingestPayload.addSample(jobName, "waiting", (System.currentTimeMillis() - item.getInQueueSince()) / 1000L);
+        } catch (Exception e) {
+            logger.warning("Unable to compute 'waitin' time.");
+        }
+
+        getDescriptor().getClient().submit(ingestPayload);
+        logger.info(String.format("Finished onStarted() for jobName: %s", jobName));
     }
 
     public final void onCompleted(final Run run, final TaskListener listener) {
         String jobName = run.getParent().getFullName();
         logger.info(String.format("onCompleted() called with jobName: %s", jobName));
+
+        IngestPayload ingestPayload = new IngestPayload(getDescriptor().getHostname());
+
+        ingestPayload.addSample(jobName, "duration", run.getDuration());
+        ingestPayload.addSample(jobName, "completed", 1);
+        if (run.getResult().isBetterOrEqualTo(Result.UNSTABLE)) {
+            ingestPayload.addSample(jobName, "success", 1);
+        } else if (run.getResult().isWorseThan(Result.UNSTABLE)) {
+            ingestPayload.addSample(jobName, "failure", 1);
+        }
+
+        getDescriptor().getClient().submit(ingestPayload);
+        logger.info(String.format("Finished onCompleted() for jobName: %s", jobName));
     }
 
     @Override
