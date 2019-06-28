@@ -1,5 +1,6 @@
 package com.metricly.jenkins.plugins;
 
+import com.metricly.jenkins.plugins.client.MetriclyClient;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Describable;
@@ -43,6 +44,7 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
         private Secret apiKey = Secret.fromString("");
         private String hostname;
         private String apiLocation = DEFAULT_API_LOCATION;
+        private MetriclyClient client;
 
         public DescriptorImpl() {
             load();
@@ -91,6 +93,13 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
 
         public String getApiLocation() {
             return apiLocation;
+        }
+
+        public MetriclyClient getClient() {
+            if (client == null) {
+                client = new MetriclyClient(apiKey.getPlainText(), apiLocation);
+            }
+            return client;
         }
     }
 }
