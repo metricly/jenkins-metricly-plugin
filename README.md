@@ -26,6 +26,11 @@ Once the plugin is installed:
 - **Hostname** (default: Jenkins) - Element name for all metrics from this Jenkins installation
 - **API Location** (default: https://api.app.metricly.com) - Metricly API location
 
+##### Advanced
+
+- **Job Name Whitelist RegEx** - If not empty **only** jobs matching this RegEx will submit statistics to Metricly
+- **Job Name Blacklist RegEx** - If not empty jobs matching this RegEx will submit **not** statistics to Metricly **even if they match the whitelist**
+
 ## Metrics
 
 This plugin will create a single element (the hostname above will be used as the element name) with the following metrics:
