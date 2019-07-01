@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 public class MetriclyBuildListener extends RunListener<Run> implements Describable<MetriclyBuildListener> {
 
     static final String DISPLAY_NAME = "Metricly Plugin";
+    static final String DEFAULT_HOSTNAME = "Jenkins";
     static final String DEFAULT_API_LOCATION = "https://api.app.metricly.com";
 
     private static final Queue queue = Queue.getInstance();
@@ -73,7 +74,7 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
     public static class DescriptorImpl extends Descriptor<MetriclyBuildListener> {
 
         private Secret apiKey = Secret.fromString("");
-        private String hostname;
+        private String hostname = DEFAULT_HOSTNAME;
         private String apiLocation = DEFAULT_API_LOCATION;
         private MetriclyClient client;
 
@@ -100,8 +101,12 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
             this.apiKey = Secret.fromString(formData.getString("apiKey"));
             logger.info(String.format("Configuring Metricly plugin with API key: %s", apiKey));
 
-            this.hostname = formData.getString("hostname");
-            logger.info(String.format("Configuring Metricly plugin with hostname: %s", hostname));
+            if (StringUtils.isNotBlank(formData.getString("hostname"))) {
+                this.hostname = formData.getString("hostname");
+                logger.info(String.format("Configuring Metricly plugin with hostname: %s", hostname));
+            } else {
+                this.hostname = DEFAULT_HOSTNAME;
+            }
 
             if (StringUtils.isNotBlank(formData.getString("apiLocation"))) {
                 this.apiLocation = formData.getString("apiLocation");
