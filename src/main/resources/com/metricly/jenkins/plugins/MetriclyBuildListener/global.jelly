@@ -14,7 +14,7 @@
   -->
   <f:section title="Metricly Plugin">
     <f:entry title="Custom API Key" field="apiKeyTitle">
-      <f:password field="apiKey" default="${apiKey}" />
+      <f:textbox field="apiKey" default="${apiKey}" />
     </f:entry>
     <f:entry title="Hostname" field="hostname">
       <f:textbox field="hostname" default="${hostname ?: 'Jenkins'}" />

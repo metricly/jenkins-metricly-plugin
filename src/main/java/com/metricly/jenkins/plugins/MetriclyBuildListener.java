@@ -11,7 +11,6 @@ import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.model.listeners.RunListener;
-import hudson.util.Secret;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.StaplerRequest;
@@ -73,7 +72,7 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
     @Extension
     public static class DescriptorImpl extends Descriptor<MetriclyBuildListener> {
 
-        private Secret apiKey = Secret.fromString("");
+        private String apiKey;
         private String hostname = DEFAULT_HOSTNAME;
         private String apiLocation = DEFAULT_API_LOCATION;
         private MetriclyClient client;
@@ -98,7 +97,7 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
 
         @Override
         public boolean configure(final StaplerRequest req, final JSONObject formData) throws FormException {
-            this.apiKey = Secret.fromString(formData.getString("apiKey"));
+            this.apiKey = formData.getString("apiKey");
             logger.info(String.format("Configuring Metricly plugin with API key: %s", apiKey));
 
             if (StringUtils.isNotBlank(formData.getString("hostname"))) {
@@ -119,7 +118,7 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
             return super.configure(req, formData);
         }
 
-        public Secret getApiKey() {
+        public String getApiKey() {
             return apiKey;
         }
 
@@ -133,7 +132,7 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
 
         public MetriclyClient getClient() {
             if (client == null) {
-                client = new MetriclyClient(apiKey.getPlainText(), apiLocation);
+                client = new MetriclyClient(apiKey, apiLocation);
             }
             return client;
         }
