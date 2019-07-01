@@ -36,7 +36,7 @@ Once the plugin is installed:
 This plugin will create a single element (the hostname above will be used as the element name) with the following metrics:
 
 - `jenkins.<job-name>.waiting` - Time (in ms) the job was waiting before starting the build
-- `jenkins.<job-name>.duration` - Time (in seconds) the job took to run
+- `jenkins.<job-name>.duration` - Time (in ms) the job took to run
 - `jenkins.<job-name>.completed` - Count of completed jobs
 - `jenkins.<job-name>.success` - Count of successful jobs
 - `jenkins.<job-name>.failure` - Count of failed jobs
