@@ -1,0 +1,13 @@
+language: java
+script:
+- mvn hpi:hpi
+deploy:
+  provider: releases
+  api_key:
+    secure: ObRJuIoXw9CwDYx/squL+EVlvOHooj8l8hbsLpBrAONrtGeVVERhWjaKfFfeXjhnRYZvr6dQNqlJaGMrpo2OHgvbb0RffRWzAozbZILXFg61j9DBOSSlSmHr8Su6nWXu3ch5QRQIhl53t5E6EIyRL3dW2mZOdOjuwEpn66iamQzheshcO0RdrX4GaU9fIN3WV+kOVcxkHwM/1TMxOdYMvFkykgdIJ03loj9HDa4/iZPdICnFA4dEXUyFX03PS7GSjFa3Mk0Za461/Us5KkOX5q+qCJ/LXUDg5qj/eFA1QqtkR/K5DENMvCBGW/pcK6WU52xkuCTF0NEEQCEKkxMY3WH0T9RtyOYcnTNZsap0Gz3mdgKQI7HDsm/CtvxMOJtpsgCBXuGWLj9kgMO09+7N6xBQx6O8DW2OnZ9f/pnVmTwny9sDC2z8+almG8kDSQVIY7ooWoJDxKgv6GsoOYa9FD3vC1p09/GRBBiZKWNekfhAJdnEULIlAn5YRq7usZv/YrgoExy+kwv1g9HnrTe3LLiJUrqh4K6/REI8ZvWRe6zEVBOx7YWuh5STCRAw7x61KXdqeFwM5nLrcuaTZQbn9R0RKCd61VsKzDLsupNyF15/bX2h8z5Asak0fBbfHijXDnqxUgHi7tUGIylxeBu7m/fTVcxsS7eTJZqPPuTftQk=
+  file: target/jenkins-metricly-plugin.hpi
+  skip_cleanup: true
+  draft: true
+  on:
+    tags: true
+    repo: metricly/jenkins-metricly-plugin
