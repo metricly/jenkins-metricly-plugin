@@ -22,5 +22,13 @@
     <f:entry title="API Location" field="apiLocation">
       <f:textbox field="apiLocation" default="${apiLocation ?: 'https://api.app.metricly.com'}" />
     </f:entry>
+    <f:advanced>
+        <f:entry title="Job Name Whitelist RegEx" field="jobWhitelist">
+          <f:textbox field="jobWhitelist" default="${jobWhitelist}" />
+        </f:entry>
+        <f:entry title="Job Name Blacklist RegEx" field="jobBlacklist">
+          <f:textbox field="jobBlacklist" default="${jobBlacklist}" />
+        </f:entry>
+    </f:advanced>
   </f:section>
 </j:jelly>

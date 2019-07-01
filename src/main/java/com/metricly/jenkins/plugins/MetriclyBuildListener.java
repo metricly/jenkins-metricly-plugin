@@ -32,6 +32,11 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
         String jobName = run.getParent().getFullName();
         logger.info(String.format("onStarted() called with jobName: %s", jobName));
 
+        if (!getDescriptor().shouldCollectForJob(jobName)) {
+            logger.info(String.format("Job %s is either blacklisted or not whitelisted, skipping", jobName));
+            return;
+        }
+
         Queue.Item item = queue.getItem(run.getQueueId());
 
         IngestPayload ingestPayload = new IngestPayload(getDescriptor().getHostname());
@@ -49,6 +54,11 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
     public final void onCompleted(final Run run, final TaskListener listener) {
         String jobName = run.getParent().getFullName();
         logger.info(String.format("onCompleted() called with jobName: %s", jobName));
+
+        if (!getDescriptor().shouldCollectForJob(jobName)) {
+            logger.info(String.format("Job %s is either blacklisted or not whitelisted, skipping", jobName));
+            return;
+        }
 
         IngestPayload ingestPayload = new IngestPayload(getDescriptor().getHostname());
 
@@ -75,6 +85,9 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
         private String apiKey;
         private String hostname = DEFAULT_HOSTNAME;
         private String apiLocation = DEFAULT_API_LOCATION;
+        private String jobWhitelist;
+        private String jobBlacklist;
+
         private MetriclyClient client;
 
         public DescriptorImpl() {
@@ -114,8 +127,23 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
                 this.apiLocation = DEFAULT_API_LOCATION;
             }
 
+            this.jobWhitelist = formData.getString("jobWhitelist");
+            logger.info(String.format("Configuring Metricly plugin with job name whitelist: %s", jobWhitelist));
+            this.jobBlacklist = formData.getString("jobBlacklist");
+            logger.info(String.format("Configuring Metricly plugin with job name blacklist: %s", jobBlacklist));
+
             save();
             return super.configure(req, formData);
+        }
+
+        public boolean shouldCollectForJob(String jobName) {
+            if (StringUtils.isNotBlank(jobBlacklist) && jobName.matches(jobBlacklist)) {
+                return false;
+            }
+            if (StringUtils.isNotBlank(jobWhitelist)) {
+                return jobName.matches(jobWhitelist);
+            }
+            return true;
         }
 
         public String getApiKey() {
@@ -128,6 +156,14 @@ public class MetriclyBuildListener extends RunListener<Run> implements Describab
 
         public String getApiLocation() {
             return apiLocation;
+        }
+
+        public String getJobWhitelist() {
+            return jobWhitelist;
+        }
+
+        public String getJobBlacklist() {
+            return jobBlacklist;
         }
 
         public MetriclyClient getClient() {
