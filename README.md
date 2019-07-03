@@ -9,7 +9,7 @@ Jenkins plugin for publishing Jenkins statistics to Metricly.
 - Go to the Jenkins Metricly Plugin releases page and download the `.hpi` file (https://github.com/metricly/jenkins-metricly-plugin/releases/latest)
 - Go to the Advanced plugin manager page in your Jenkins installation (`/pluginManager/advanced`)
 - Upload the `.hpi` file in the Upload Plugin section
-- Restart Jenkins to finalize the install, then go to the Global Settions section below
+- Restart Jenkins to finalize the install, then go to the Global Settings section below
 
 ### Global Settings
 
@@ -29,14 +29,14 @@ Once the plugin is installed:
 ##### Advanced
 
 - **Job Name Whitelist RegEx** - If not empty **only** jobs matching this RegEx will submit statistics to Metricly
-- **Job Name Blacklist RegEx** - If not empty jobs matching this RegEx will submit **not** statistics to Metricly **even if they match the whitelist**
+- **Job Name Blacklist RegEx** - If not empty jobs matching this RegEx will **not** submit statistics to Metricly **even if they match the whitelist**
 
 ## Metrics
 
 This plugin will create a single element (the hostname above will be used as the element name) with the following metrics:
 
 - `jenkins.<job-name>.waiting` - Time (in ms) the job was waiting before starting the build
-- `jenkins.<job-name>.duration` - Time (in seconds) the job took to run
+- `jenkins.<job-name>.duration` - Time (in ms) the job took to run
 - `jenkins.<job-name>.completed` - Count of completed jobs
 - `jenkins.<job-name>.success` - Count of successful jobs
 - `jenkins.<job-name>.failure` - Count of failed jobs
