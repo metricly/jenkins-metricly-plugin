@@ -22,6 +22,7 @@ public class IngestPayload implements Serializable {
     private String type = "Jenkins";
     private Set<Map<String, String>> metrics = new HashSet<>();
     private List<Map<String, Object>> samples = new ArrayList<>();
+    private List<Map<String, String>> tags = Arrays.asList(ImmutableMap.of("name", "n.collectors", "value", "Jenkins"));
 
     public IngestPayload(String hostname) {
         this.id = hostname;
