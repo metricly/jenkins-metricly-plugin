@@ -9,7 +9,7 @@ Jenkins plugin for publishing Jenkins statistics to Metricly.
 - Go to the Jenkins Metricly Plugin releases page and download the `.hpi` file (https://github.com/metricly/jenkins-metricly-plugin/releases/latest)
 - Go to the Advanced plugin manager page in your Jenkins installation (`/pluginManager/advanced`)
 - Upload the `.hpi` file in the Upload Plugin section
-- Restart Jenkins to finalize the install, then go to the Global Settions section below
+- Restart Jenkins to finalize the install, then go to the Global Settings section below
 
 ### Global Settings
 
@@ -29,7 +29,7 @@ Once the plugin is installed:
 ##### Advanced
 
 - **Job Name Whitelist RegEx** - If not empty **only** jobs matching this RegEx will submit statistics to Metricly
-- **Job Name Blacklist RegEx** - If not empty jobs matching this RegEx will submit **not** statistics to Metricly **even if they match the whitelist**
+- **Job Name Blacklist RegEx** - If not empty jobs matching this RegEx will **not** submit statistics to Metricly **even if they match the whitelist**
 
 ## Metrics
 
