@@ -22,7 +22,7 @@ Once the plugin is installed:
 
 #### Configuration
 
-- **Custom API Key** - Input your Metricly **CUSTOM** integration (found on https://try.cloudwisdom.virtana.com/) API key
+- **Custom API Key** - Input your CloudWisdom **CUSTOM** integration (found on https://try.cloudwisdom.virtana.com/) API key
 - **Hostname** (default: Jenkins) - Element name for all metrics from this Jenkins installation
 - **API Location** (default: https://try.cloudwisdom.virtana.com/) - Metricly API location
 
